@@ -9,8 +9,8 @@
     "dev": "nodemon src/server.ts",
     "build": "tsc"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["chatgpt", "scrapper", "puppeteer", "openai"],
+  "author": "Developer Devyansh",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
