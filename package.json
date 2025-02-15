@@ -1,0 +1,32 @@
+{
+  "name": "DevGPT: Innovative ChatGPT Scraping Solution",
+  "version": "1.0.0",
+  "description": "DevGPT is a unique project that provides an alternative method to interact with ChatGPT by bypassing traditional API limitations. Instead of using official LLM APIs, this project employs web scraping techniques with Puppeteer to fetch responses directly from the ChatGPT web interface.",
+  "main": "src/server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/server.js",
+    "dev": "nodemon src/server.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "puppeteer": "^23.11.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
+    "eslint": "^9.17.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DevGPT: Innovative ChatGPT Scraping Solutions</title>
+    <!-- Import Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+      integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <style>
+      :root {
+        --accent: #584bd6;
+        --accentGray: #e1e8f0;
+      }
+
+      pre div {
+        background-color: #fff !important;
+      }
+      .bubble {
+        --r: 1em; /* the radius */
+        --t: 1.5em; /* the size of the tail */
+
+        max-width: 300px;
+        padding: 1em;
+        border-inline: var(--t) solid #0000;
+        border-radius: calc(var(--r) + var(--t)) / var(--r);
+        mask: radial-gradient(100% 100% at var(--_p) 0, #0000 99%, #000 102%)
+            var(--_p) 100% / var(--t) var(--t) no-repeat,
+          linear-gradient(#000 0 0) padding-box;
+        color: #fff;
+      }
+      .left {
+        --_p: 0;
+        border-bottom-left-radius: 0 0;
+        place-self: start;
+      }
+
+      .right {
+        --_p: 100%;
+        border-bottom-right-radius: 0 0;
+        place-self: end;
+      }
+      /* botChatLoader */
+      .botChatLoader {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        display: block;
+        position: relative;
+        background: #fff;
+        margin-inline: 14px;
+        box-shadow: -20px 0 #fff, 20px 0 #fff;
+        box-sizing: border-box;
+        animation: shadowPulse 2s linear infinite;
+      }
+
+      @keyframes shadowPulse {
+        33% {
+          background: #fff;
+          box-shadow: -20px 0 var(--accent), 20px 0 #fff;
+        }
+        66% {
+          background: var(--accent);
+          box-shadow: -20px 0 #fff, 20px 0 #fff;
+        }
+        100% {
+          background: #fff;
+          box-shadow: -20px 0 #fff, 20px 0 var(--accent);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-slate-800 min-h-screen flex items-center justify-center px-4">
+    <main class="w-full max-w-2xl">
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <!-- Chat header -->
+        <div class="bg-[var(--accent)] px-6 p-4">
+          <h1 class="text-lg font-semibold text-white space-x-2">
+            <i class="ri-chat-smile-ai-fill text-2xl"></i><span>DevGpt</span>
+          </h1>
+        </div>
+        <!-- Chat messages container -->
+        <div
+          id="parentChatContainer"
+          class="px-6 py-4 space-y-4 h-80 overflow-y-auto bg-gray-50"
+        >
+          <div id="chat-container" class="space-y-4">
+            <!-- Messages will be displayed here    -->
+          </div>
+          <div id="introDiv" class="w-full relative grid place-items-center">
+            <div
+              class="absolute ml-[200px] w-[200px] aspect-square blur-3xl bg-[var(--accent)] opacity-30"
+            ></div>
+            <i
+              class="ri-chat-smile-ai-line text-[100px] text-[var(--accent)]"
+            ></i>
+            <h2 class="text-2xl font-medium">Hi, I am DevGpt</h2>
+            <p>How can I help you today?</p>
+          </div>
+          <div
+            id="scrappingBubble"
+            class="w-full hidden flex items-center justify-start"
+          >
+            <div
+              class="bg-[var(--accentGray)] right text-gray-800 bubble flex items-center justify-center gap-3"
+            >
+              <i class="ri-chat-smile-ai-fill text-2xl"></i>
+              <div><span class="botChatLoader block"></span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Chat input area -->
+        <div class="border-t rounded-t-2xl px-6 py-4 bg-slate-50">
+          <textarea
+            autofocus
+            id="prompt-input"
+            rows="2"
+            class="w-full p-3 border rounded-xl transition-all focus:ring ring-[var(--accent)] focus:outline-none focus:ring-2"
+            placeholder="Type your message..."
+          ></textarea>
+          <button
+            id="generate-btn"
+            class="mt-3 w-full bg-[var(--accent)] hover:opacity-80 text-white py-2.5 rounded-2xl transition flex items-center justify-center gap-2"
+          >
+            <i class="ri-loader-2-line animate-spin hidden" id="loader"></i>
+            <span>Scrape Response</span>
+            <i class="ri-send-plane-2-line" id="sendIcon"></i>
+          </button>
+        </div>
+      </div>
+      <p class="text-center text-white text-xs opacity-80 p-3 px-10">
+        This response has been obtained by scraping ChatGPT's output using
+        Puppeteer for educational project purposes, without utilizing any API.
+      </p>
+    </main>
+
+    <script>
+      const chatContainer = document.getElementById("chat-container");
+      const promptInput = document.getElementById("prompt-input");
+      const generateBtn = document.getElementById("generate-btn");
+      const loader = document.getElementById("loader");
+      const sendIcon = document.getElementById("sendIcon");
+      const introDiv = document.getElementById("introDiv");
+      const parentChatContainer = document.getElementById(
+        "parentChatContainer"
+      );
+      const scrappingBubble = document.getElementById("scrappingBubble");
+      hljs.highlightAll();
+      function setLoading(isLoading) {
+        const btnText = generateBtn.querySelector("span");
+        if (isLoading) {
+          generateBtn.disabled = true;
+          generateBtn.classList.add("opacity-75", "cursor-not-allowed");
+          loader.classList.remove("hidden");
+          btnText.textContent = "Scrapping...";
+          sendIcon.classList.add("hidden");
+          introDiv.classList.add("hidden");
+          scrappingBubble.classList.remove("hidden");
+        } else {
+          generateBtn.disabled = false;
+          generateBtn.classList.remove("opacity-75", "cursor-not-allowed");
+          loader.classList.add("hidden");
+          btnText.textContent = "Scrape Response";
+          sendIcon.classList.remove("hidden");
+          scrappingBubble.classList.add("hidden");
+        }
+      }
+
+      function addMessage(content, sender) {
+        const messageWrapper = document.createElement("div");
+        messageWrapper.className = `flex ${
+          sender === "user" ? "justify-end" : "justify-start"
+        }`;
+
+        const messageBubble = document.createElement("div");
+        messageBubble.className = `
+        max-w-xs md:max-w-md p-3 bubble  animate__animated animate__zoomIn animate__faster shadow
+        ${
+          sender === "user"
+            ? "bg-[var(--accent)] text-white left"
+            : "bg-[var(--accentGray)] text-gray-800 right"
+        }
+      `;
+        messageBubble.innerHTML = `${
+          sender !== "user"
+            ? `<i class="ri-chat-smile-ai-fill text-lg"></i> `
+            : ""
+        }${content}`;
+
+        messageWrapper.prepend(messageBubble);
+        chatContainer.append(messageWrapper);
+        parentChatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+
+      generateBtn.addEventListener("click", async () => {
+        const prompt = promptInput.value.trim();
+        const chatId = window.location.href;
+        const chatIdMatch = chatId.split("#")[1];
+        const chatIdValue = chatIdMatch || null;
+
+        if (!prompt) return;
+
+        setLoading(true);
+        addMessage(prompt, "user");
+        promptInput.value = "";
+
+        try {
+          const response = await fetch("/api/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt, chatIdValue }),
+          });
+          const data = await response.json();
+
+          if (data.error) {
+            addMessage(`Error: ${JSON.stringify(data.error)}`, "bot");
+          } else {
+            data.url && (window.location.href = data.url);
+            addMessage(data.data.result, "bot");
+          }
+        } catch (error) {
+          addMessage(`Network Error: ${error.message}`, "bot");
+        } finally {
+          setLoading(false);
+        }
+      });
+
+      // Add Enter key support (Shift + Enter for new line)
+      promptInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          generateBtn.click();
+        }
+      });
+    </script>
+  </body>
+</html>
