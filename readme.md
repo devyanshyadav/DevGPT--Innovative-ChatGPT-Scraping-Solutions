@@ -1,6 +1,6 @@
 # DevGPT: Innovative ChatGPT Scraping Solution
-![DevGPT](public/banner.png)
 
+![DevGPT](public/banner.png)
 
 ## 🚀 Project Overview
 
@@ -9,6 +9,7 @@ DevGPT is a unique project that provides an alternative method to interact with 
 ## ⚠️ Important Disclaimer
 
 **PRACTICE PROJECT NOTICE**
+
 - This is a **experimental/practice project**
 - Not intended for production use
 - May have significant limitations and potential issues
@@ -28,15 +29,15 @@ DevGPT is a unique project that provides an alternative method to interact with 
 
 The project uses the following key constants (from `src/utils/constants.ts`):
 
-| Constant | Value | Description |
-|----------|-------|-------------|
-| `COOKIES_PATH` | `"cookies.json"` | Path for storing authentication cookies |
-| `LOGIN_DELAY` | `5000` | Delay (in ms) during login process |
-| `GPT_URL` | `"https://chatgpt.com/"` | Target ChatGPT website URL |
-| `BROWSER_OPEN` | `true` | Flag to control browser visibility |
-| `BROWSER_WITHOUT_RESOURCES` | `false` | Flag to control resource loading |
-| `RATE_LIMIT_WINDOW_MS` | `5 * 60 * 1000` | Rate limit window (in ms) |
-| `RATE_LIMIT_MAX` | `100` | Maximum requests per window |
+| Constant                    | Value                    | Description                             |
+| --------------------------- | ------------------------ | --------------------------------------- |
+| `COOKIES_PATH`              | `"cookies.json"`         | Path for storing authentication cookies |
+| `LOGIN_DELAY`               | `5000`                   | Delay (in ms) during login process      |
+| `GPT_URL`                   | `"https://chatgpt.com/"` | Target ChatGPT website URL              |
+| `BROWSER_OPEN`              | `true`                   | Flag to control browser visibility      |
+| `BROWSER_WITHOUT_RESOURCES` | `true`                   | Flag to control resource loading        |
+| `RATE_LIMIT_WINDOW_MS`      | `5 * 60 * 1000`          | Rate limit window (in ms)               |
+| `RATE_LIMIT_MAX`            | `100`                    | Maximum requests per window             |
 
 ## 🛠 Technology Stack
 
@@ -57,7 +58,7 @@ The project uses the following key constants (from `src/utils/constants.ts`):
 
 - **Why Gmail?** ChatGPT requires authentication before accessing its services
 - A Gmail account is necessary to log in and interact with the ChatGPT interface
-- **Privacy Assurance**: 
+- **Privacy Assurance**:
   - Credentials are **ONLY** used locally for authentication
   - No credentials are transmitted, stored, or shared externally
   - Credentials are used solely to establish a browser session
@@ -70,11 +71,15 @@ The project uses the following key constants (from `src/utils/constants.ts`):
 
 ```bash
 # Example .env file
-GMAIL_EMAIL=your_email@gmail.com
-GMAIL_PASSWORD=your_secure_password
+USER_GMAIL=your_email@gmail.com
+USER_PASSWORD=your_secure_password
+PORT=8000
+NODE_ENV=development
+BASE_URL=http://localhost:8000
 ```
 
-**Important**: 
+**Important**:
+
 - Recommend using an app-specific password
 - Consider two-factor authentication for added security
 - Credentials are processed entirely within your local environment
@@ -82,12 +87,14 @@ GMAIL_PASSWORD=your_secure_password
 ## �🔧 Installation
 
 1. Clone the repository
+
    ```bash
    git clone https://github.com/yourusername/devgpt.git
    cd devgpt
    ```
 
 2. Install dependencies
+
    ```bash
    npm install
    ```
@@ -95,18 +102,23 @@ GMAIL_PASSWORD=your_secure_password
 3. Set up environment variables
    Create a `.env` file with the following:
    ```
-   GMAIL_EMAIL=your_email@gmail.com
-   GMAIL_PASSWORD=your_gmail_password
+   USER_GMAIL=your_email@gmail.com
+   USER_PASSWORD=your_gmail_password
+   PORT=8000
+   NODE_ENV=development
+   BASE_URL=http://localhost:8000
    ```
 
 ## 🚀 Running the Project
 
 ### Development Mode
+
 ```bash
 npm run dev
 ```
 
 ### Production Build
+
 ```bash
 npm run build
 npm start
@@ -115,12 +127,14 @@ npm start
 ## 🔍 API Usage
 
 ### Generate Response
+
 - **Endpoint**: `/api/generate`
 - **Method**: POST
 - **Request Body**:
   ```json
   {
-    "prompt": "Your question or prompt here"
+    "prompt": "Your question or prompt here",
+    "chatIdValue": "chatgpt chatId or null"
   }
   ```
 
