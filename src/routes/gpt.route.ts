@@ -97,7 +97,6 @@ gptRouter.post("/generate", async (req: any, res: any) => {
     if (!prompt) {
       throw new Error("Prompt is required");
     }
-    console.log(chatIdValue);
     const data = await scrape({
       url: `${CONSTANTS.GPT_URL}c/${chatIdValue}` || CONSTANTS.GPT_URL,
       scrapeFunction: async (page) => {
